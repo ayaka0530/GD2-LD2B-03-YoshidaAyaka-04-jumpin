@@ -37,7 +37,6 @@ public class Player : MonoBehaviour
             jumpCount++;
             GameObject bulletObject = Instantiate(Bullet, transform.position, Quaternion.identity);
             Bullet bullet = bulletObject.GetComponent<Bullet>();
-            bullet.angle = 0;
 
             Debug.Log("jupCount : " + jumpCount);
         }

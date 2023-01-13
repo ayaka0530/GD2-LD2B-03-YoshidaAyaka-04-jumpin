@@ -4,37 +4,36 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float pi = 3.1415f;
     public GameManager gameManager;
-    public float angle = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        float speed = 0.5f;
-
-        float angleRad = angle * (pi / 180);
-        Vector2 direction = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-
-        direction *= speed;
-
-        //飛んでいく方向
-        Vector2 pos = transform.position;
-
-        pos.x += direction.x;
-        pos.y += direction.y;
-
-        transform.position = new Vector2(pos.x, pos.y);
-
-        //画面外出たら無くなる
-        if (pos.x >= 9)
-        {
-            Destroy(this.gameObject);
-        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        float speed = 0.1f;
+        float distanceCount = 0f;
+
+        //真下に飛ぶ挙動
+        Vector2 pos = transform.position;
+
+        pos.y -= speed;
+        distanceCount++;
+
+        transform.position = new Vector2(pos.x, pos.y);
+
+        //ある程度進んだら無くなる
+        if (pos.y <= -5)
+        {
+            Destroy(this.gameObject);
+        }
     }
+    /*void OnBecameInvisible()
+    {
+        Destroy(this.gameObject);
+    }*/
 }
