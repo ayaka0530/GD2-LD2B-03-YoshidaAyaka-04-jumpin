@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -32,8 +32,11 @@ public class Bullet : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    /*void OnBecameInvisible()
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        Destroy(this.gameObject);
-    }*/
+        if (other.gameObject.tag == "Enemy")
+        {
+            //jumpCount = 0;
+        }
+    }
 }

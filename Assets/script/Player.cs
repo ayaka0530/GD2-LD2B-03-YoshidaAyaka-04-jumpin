@@ -50,5 +50,10 @@ public class Player : MonoBehaviour
         {
             jumpCount = 0;
         }
+
+        if(other.gameObject.tag == "Enemy")
+        {
+            jumpCount = 0;
+        }
     }
 }
