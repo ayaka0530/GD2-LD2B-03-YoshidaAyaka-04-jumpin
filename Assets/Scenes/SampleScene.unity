@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 1800032171}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -365,6 +365,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Bullet: {fileID: 3669673428498146856, guid: aab9639c8f053b04e8aefb832bbaed35, type: 3}
+  gameoverText: {fileID: 0}
+  titleButton: {fileID: 0}
+  gameoverAudio: {fileID: 0}
+  heartArray:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &7281309694743339193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -372,17 +379,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1418533418559817829, guid: 86c979e8f42339a40a3b40b6a5e0c978, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2098644469366359017, guid: 86c979e8f42339a40a3b40b6a5e0c978, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2098644469366359017, guid: 86c979e8f42339a40a3b40b6a5e0c978, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.9133677
+      value: -2.62
       objectReference: {fileID: 0}
     - target: {fileID: 2098644469366359017, guid: 86c979e8f42339a40a3b40b6a5e0c978, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5777178
+      value: -0.22
       objectReference: {fileID: 0}
     - target: {fileID: 2098644469366359017, guid: 86c979e8f42339a40a3b40b6a5e0c978, type: 3}
       propertyPath: m_LocalPosition.z
