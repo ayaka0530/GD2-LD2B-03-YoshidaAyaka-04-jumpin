@@ -27,16 +27,16 @@ public class Bullet : MonoBehaviour
         transform.position = new Vector2(pos.x, pos.y);
 
         //‚ ‚é’ö“xi‚ñ‚¾‚ç–³‚­‚È‚é
-        if (pos.y <= -5)
+        if (pos.y <= -10)
         {
             Destroy(this.gameObject);
         }
     }
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            //jumpCount = 0;
+            Destroy(this.gameObject);
         }
     }
 }

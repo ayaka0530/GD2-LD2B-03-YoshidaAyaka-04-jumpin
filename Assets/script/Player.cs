@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Renderer target;
+
     public GameObject Bullet;
     public GameObject gameoverText;    //レベルクリアと表示するテキストを格納
     public GameObject titleButton;   //次のレベルへ遷移するボタンを格納
     public AudioSource gameoverAudio;   //音楽を再生するコンポーネント
     public GameObject[] heartArray = new GameObject[3]; //ハートの表示
     public Rigidbody2D rb;
-
 
     private float speed = 0.05f;
     private int jumpCount = 0;
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //ダメージを受けていなかったら動く(無敵時間内じゃない)
         if (isDmg == false)
         {
@@ -59,7 +61,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown("space") && this.jumpCount < 3)
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector3(0, jumpForce, 0);
-                jumpCount++;
+                jumpCount++;//ジャンプのカウントを増やす
                 GameObject bulletObject = Instantiate(Bullet, transform.position, Quaternion.identity);
                 Bullet bullet = bulletObject.GetComponent<Bullet>();
 
@@ -70,8 +72,9 @@ public class Player : MonoBehaviour
         //無敵時間内
         else if (isDmg == true)
         {
+            GetComponent<RendererOnOffExample>().enabled = true;
             //無敵時間のカウントを始める
-            invincibleTime++;
+            invincibleTime += Time.deltaTime;
 
             //向きでノックバック方向を判断
             if (transform.localScale.x >= 0)
@@ -83,11 +86,13 @@ public class Player : MonoBehaviour
                 rb.AddForce(transform.right * 5.0f);
             }
 
-            if (invincibleTime >= 200)
+            if (invincibleTime >= 1)
             {
                 invincibleTime = 0;//無敵時間カウントを元に戻す
                 isDmg = false;//ダメージ受けていない状態に戻す
                 isInvincible = false;//無敵時間の終了
+                GetComponent<RendererOnOffExample>().enabled = false;
+
             }
         }
 
@@ -95,7 +100,8 @@ public class Player : MonoBehaviour
         //プレイヤーのHPが0になったらゲームオーバー
         if (playerHp <= 0)
         {
-            Destroy(this.gameObject);
+
+            //Destroy(this.gameObject);
             //gameoverText.SetActive(true);  //無効になって非表示になったゲームオブジェクトを
             //titleButton.SetActive(true); //このタイミングで有効にする。
             //gameoverAudio.Play();          //Playメソッドを実行することが出来る
@@ -168,9 +174,9 @@ public class Player : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
-    //プレイヤーの現在のジャンプ数を教える関数
-    public int TeachJumpCount()
+    public void ResetJumpCount()
     {
-        return jumpCount;
+        jumpCount = 0;
     }
+    
 }

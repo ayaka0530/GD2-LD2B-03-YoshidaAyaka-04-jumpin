@@ -15,6 +15,7 @@ public class PlayerFollw : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //nullチェックする
         Vector3 cameraPos = new Vector3(this.transform.position.x, player.transform.position.y, this.transform.position.z);
         this.transform.position = cameraPos;
     }

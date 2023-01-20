@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public int jumpCount;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,4 +19,5 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
 }

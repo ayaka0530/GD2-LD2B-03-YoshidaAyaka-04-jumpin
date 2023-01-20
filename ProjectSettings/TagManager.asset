@@ -6,14 +6,17 @@ TagManager:
   tags:
   - Floor
   - Enemy
+  - Bullet
+  - EnemyBullet
+  - GameManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Invisible
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
