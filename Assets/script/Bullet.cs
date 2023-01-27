@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("GameManger").GetComponent<GameManager>();
 
     }
 
@@ -25,18 +26,20 @@ public class Bullet : MonoBehaviour
         distanceCount++;
 
         transform.position = new Vector2(pos.x, pos.y);
-
-        //Ç†ÇÈíˆìxêiÇÒÇæÇÁñ≥Ç≠Ç»ÇÈ
-        if (pos.y <= -10)
-        {
-            Destroy(this.gameObject);
-        }
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Enemy")
         {
             Destroy(this.gameObject);
+            gameManager.AddScoreCount();
+        }
+
+        if (other.gameObject.tag == "BulletDestroy")
+        {
+            Destroy(this.gameObject);
         }
     }
+
+
 }

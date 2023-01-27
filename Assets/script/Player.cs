@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public GameObject titleButton;   //次のレベルへ遷移するボタンを格納
     public AudioSource gameoverAudio;   //音楽を再生するコンポーネント
     public GameObject[] heartArray = new GameObject[3]; //ハートの表示
+    public GameObject[] bulletArray = new GameObject[3]; //弾の表示
+
     public Rigidbody2D rb;
 
     private float speed = 0.05f;
@@ -21,12 +23,19 @@ public class Player : MonoBehaviour
     private bool isInvincible = false;//trueの時に無敵時間になる
     private bool isDmg = false;
     private int direction = 0;
+    private Renderer spriteRenderer;
+    public Renderer vertical;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        vertical = GameObject.Find("Vertical").GetComponent<SpriteRenderer>();
+        //Physics2D.gravity = new Vector2(30f, 0);
+
     }
 
     // Update is called once per frame
@@ -34,7 +43,7 @@ public class Player : MonoBehaviour
     {
 
         //ダメージを受けていなかったら動く(無敵時間内じゃない)
-        if (isDmg == false)
+        if (isDmg == false && playerHp > 0)
         {
             Vector2 position = transform.position;
 
@@ -68,6 +77,16 @@ public class Player : MonoBehaviour
                 Debug.Log("jupCount : " + jumpCount);
             }
             transform.position = position;
+
+            //左右ループ
+            if (transform.position.x > 3.5f)
+            {
+                transform.position = new Vector3(-3.5f, transform.position.y, 0);
+            }
+            else if (transform.position.x < -3.5f)
+            {
+                transform.position = new Vector3(3.5f, transform.position.y, 0);
+            }
         }
         //無敵時間内
         else if (isDmg == true)
@@ -92,23 +111,24 @@ public class Player : MonoBehaviour
                 isDmg = false;//ダメージ受けていない状態に戻す
                 isInvincible = false;//無敵時間の終了
                 GetComponent<RendererOnOffExample>().enabled = false;
-
+            }
+            //プレイヤーのHPが0になったらゲームオーバー
+            if (playerHp <= 0)
+            {
+                gameoverText.SetActive(true); //無効になって非表示になったゲームオブジェクトを
+                spriteRenderer.enabled = false;//プレイヤーのイラストを非表示
+                vertical.enabled = false;//プレイヤーのイラストを非表示
+                transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                //titleButton.SetActive(true); //このタイミングで有効にする。
+                //gameoverAudio.Play(); //Playメソッドを実行することが出来る
             }
         }
 
 
-        //プレイヤーのHPが0になったらゲームオーバー
-        if (playerHp <= 0)
-        {
 
-            //Destroy(this.gameObject);
-            //gameoverText.SetActive(true);  //無効になって非表示になったゲームオブジェクトを
-            //titleButton.SetActive(true); //このタイミングで有効にする。
-            //gameoverAudio.Play();          //Playメソッドを実行することが出来る
-        }
 
         //ハートの表示
-        /*if (playerHp == 3)
+        if (playerHp == 3)
         {
             heartArray[2].gameObject.SetActive(true);
             heartArray[1].gameObject.SetActive(true);
@@ -133,7 +153,41 @@ public class Player : MonoBehaviour
             heartArray[2].gameObject.SetActive(false);
             heartArray[1].gameObject.SetActive(false);
             heartArray[0].gameObject.SetActive(false);
-        }*/
+        }
+
+        if (playerHp == 3)
+        {
+            heartArray[2].gameObject.SetActive(true);
+            heartArray[1].gameObject.SetActive(true);
+            heartArray[0].gameObject.SetActive(true);
+        }
+
+        //弾数の表示
+        if (jumpCount == 0)
+        {
+            bulletArray[2].gameObject.SetActive(true);
+            bulletArray[1].gameObject.SetActive(true);
+            bulletArray[0].gameObject.SetActive(true);
+        }
+        if (jumpCount == 1)
+        {
+            bulletArray[2].gameObject.SetActive(false);
+            bulletArray[1].gameObject.SetActive(true);
+            bulletArray[0].gameObject.SetActive(true);
+        }
+
+        if (jumpCount == 2)
+        {
+            bulletArray[2].gameObject.SetActive(false);
+            bulletArray[1].gameObject.SetActive(false);
+            bulletArray[0].gameObject.SetActive(true);
+        }
+        if (jumpCount == 3)
+        {
+            bulletArray[2].gameObject.SetActive(false);
+            bulletArray[1].gameObject.SetActive(false);
+            bulletArray[0].gameObject.SetActive(false);
+        }
     }
 
 
@@ -178,5 +232,9 @@ public class Player : MonoBehaviour
     {
         jumpCount = 0;
     }
-    
+
+    private void OnDisable()
+    {
+        target.enabled = true;
+    }
 }

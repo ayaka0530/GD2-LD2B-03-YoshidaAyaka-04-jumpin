@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - EnemyBullet
   - GameManager
+  - BulletDestroy
   layers:
   - Default
   - TransparentFX
