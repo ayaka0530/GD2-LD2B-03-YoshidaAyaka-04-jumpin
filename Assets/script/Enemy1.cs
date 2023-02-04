@@ -9,6 +9,8 @@ public class Enemy1 : MonoBehaviour
     [SerializeField] private Transform rightEdge;
     [SerializeField] float spawnInterval;
     GameManager gameManager;
+    public AudioSource dmgAudio;   //音楽を再生するコンポーネント
+
 
     float speed = 1.0f;
     float spawnTimer;
@@ -21,7 +23,7 @@ public class Enemy1 : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        gameManager = GameObject.Find("GameManger").GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         StartPosition = transform.position;
         spawnTimer = spawnInterval;
         leftEdge = GameObject.Find("LeftEdge").transform;
@@ -73,6 +75,11 @@ public class Enemy1 : MonoBehaviour
 
             enemyHp = enemyHp - 1;
             Debug.Log("playerHp" + enemyHp);
+        }
+
+        if(other.gameObject.tag == "Player")
+        {
+            dmgAudio.Play();
         }
     }
 }

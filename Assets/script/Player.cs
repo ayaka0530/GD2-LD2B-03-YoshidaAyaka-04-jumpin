@@ -7,24 +7,25 @@ public class Player : MonoBehaviour
     [SerializeField] private Renderer target;
 
     public GameObject Bullet;
-    public GameObject gameoverText;    //レベルクリアと表示するテキストを格納
-    public GameObject titleButton;   //次のレベルへ遷移するボタンを格納
-    public AudioSource gameoverAudio;   //音楽を再生するコンポーネント
+    public GameObject gameoverText;    //ゲームオーバーと表示するテキストを格納
+    public AudioSource jumpAudio;   //音楽を再生するコンポーネント
     public GameObject[] heartArray = new GameObject[3]; //ハートの表示
     public GameObject[] bulletArray = new GameObject[3]; //弾の表示
-
+    [SerializeField] GameObject dustCloud;//着地エフェクト
+    public GameManager gameManager;
     public Rigidbody2D rb;
+    public Renderer vertical;
 
     private float speed = 0.05f;
     private int jumpCount = 0;
-    private float jumpForce = 15f;
+    private float jumpForce = 10f;
     private int playerHp = 3;
     private float invincibleTime = 0f;
     private bool isInvincible = false;//trueの時に無敵時間になる
     private bool isDmg = false;
     private int direction = 0;
     private Renderer spriteRenderer;
-    public Renderer vertical;
+
 
 
 
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         vertical = GameObject.Find("Vertical").GetComponent<SpriteRenderer>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         //Physics2D.gravity = new Vector2(30f, 0);
 
     }
@@ -41,11 +43,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        //ダメージを受けていなかったら動く(無敵時間内じゃない)
-        if (isDmg == false && playerHp > 0)
-        {
-            Vector2 position = transform.position;
+Vector2 position = transform.position;
 
             //左右の移動
             if (Input.GetKey("left") || (Input.GetKey(KeyCode.A)))
@@ -65,7 +63,12 @@ public class Player : MonoBehaviour
                 //動く向きに反転
                 transform.localScale = new Vector3(direction, 1, 1);
             }
+            transform.position = position;
 
+
+        //ダメージを受けていなかったら動く(無敵時間内じゃない)
+        if (isDmg == false && playerHp > 0)
+        {
             //ジャンプ
             if (Input.GetKeyDown("space") && this.jumpCount < 3)
             {
@@ -73,19 +76,22 @@ public class Player : MonoBehaviour
                 jumpCount++;//ジャンプのカウントを増やす
                 GameObject bulletObject = Instantiate(Bullet, transform.position, Quaternion.identity);
                 Bullet bullet = bulletObject.GetComponent<Bullet>();
+                jumpAudio.Play();
 
                 Debug.Log("jupCount : " + jumpCount);
+
+                gameManager.SetDistance(transform.position.y);
             }
             transform.position = position;
 
             //左右ループ
-            if (transform.position.x > 3.5f)
+            if (transform.position.x > 3.4f)
             {
-                transform.position = new Vector3(-3.5f, transform.position.y, 0);
+                transform.position = new Vector3(-3.3f, transform.position.y, 0);
             }
-            else if (transform.position.x < -3.5f)
+            else if (transform.position.x < -3.4f)
             {
-                transform.position = new Vector3(3.5f, transform.position.y, 0);
+                transform.position = new Vector3(3.3f, transform.position.y, 0);
             }
         }
         //無敵時間内
@@ -105,6 +111,7 @@ public class Player : MonoBehaviour
                 rb.AddForce(transform.right * 5.0f);
             }
 
+            //無敵時間が終わったら
             if (invincibleTime >= 1)
             {
                 invincibleTime = 0;//無敵時間カウントを元に戻す
@@ -120,15 +127,12 @@ public class Player : MonoBehaviour
                 vertical.enabled = false;//プレイヤーのイラストを非表示
                 transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                 //titleButton.SetActive(true); //このタイミングで有効にする。
-                //gameoverAudio.Play(); //Playメソッドを実行することが出来る
+                gameManager.ChangeScene();
             }
         }
 
-
-
-
         //ハートの表示
-        if (playerHp == 3)
+        /*if (playerHp == 3)
         {
             heartArray[2].gameObject.SetActive(true);
             heartArray[1].gameObject.SetActive(true);
@@ -160,7 +164,7 @@ public class Player : MonoBehaviour
             heartArray[2].gameObject.SetActive(true);
             heartArray[1].gameObject.SetActive(true);
             heartArray[0].gameObject.SetActive(true);
-        }
+        }*/
 
         //弾数の表示
         if (jumpCount == 0)
@@ -197,6 +201,8 @@ public class Player : MonoBehaviour
         {
             //床に降りたらjumpCountを0に
             jumpCount = 0;
+            //床にプレイヤーがあたったらエフェクトを出す
+            Instantiate(dustCloud, transform.position, dustCloud.transform.rotation);
         }
 
         if (other.gameObject.tag == "Enemy")
@@ -207,7 +213,7 @@ public class Player : MonoBehaviour
             if (isInvincible == false)
             {
                 //プレイヤーのHPを１減らす
-                playerHp = playerHp - 1;
+                //playerHp = playerHp - 1;
                 Debug.Log("playerHp" + playerHp);
                 isDmg = true;
                 isInvincible = true;
@@ -237,4 +243,5 @@ public class Player : MonoBehaviour
     {
         target.enabled = true;
     }
+
 }

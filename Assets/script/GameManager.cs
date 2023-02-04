@@ -20,10 +20,13 @@ public class GameManager : MonoBehaviour
     List<EnemyRespawn> enemyRespawnList;
 
     public int jumpCount;
-    private int scoreCount;
-    public Text textComponent;
+    private float scoreCount;
+    public Text limitTextComponent;
+    private float limitCount = 30;
+    public float maxPlayerDistance;
 
     public GameObject enemy1Prefab;
+
     //public float endTimeCount = 5;
 
 
@@ -34,6 +37,14 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
         enemyRespawnList = new List<EnemyRespawn>();
         DontDestroyOnLoad(gameObject);//シーンが変わっても消えなくなる
+
+
+        if (SceneManager.GetActiveScene().name == "SampleScene")
+        {
+            //30秒経ったらリザルト画面に飛ばす関数を呼び出す
+            Invoke("ChangeScene", 30.0f);
+        }
+
     }
 
     // Update is called once per frame
@@ -53,8 +64,12 @@ public class GameManager : MonoBehaviour
         //タイマーが０以下になる要素を全て削除
         enemyRespawnList.RemoveAll(t => t.timer <= 0);
 
-        //60秒経ったらリザルト画面に飛ばす関数を呼び出す
-        Invoke("ChangeScene", 5.0f);
+        if (SceneManager.GetActiveScene().name == "SampleScene")
+        {
+            limitCount -= Time.deltaTime;
+            limitTextComponent.text = string.Format("{0:f0}",limitCount);//小数点の制限
+        }
+
     }
     public void AddScoreCount()
     {
@@ -71,8 +86,20 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Result");
     }
-    public int TeachScore()
+    public float TeachEnemyScore()
     {
         return scoreCount;
+    }
+    public float TeachDistance()
+    {
+        return maxPlayerDistance;
+    }
+
+    public void SetDistance(float distance)
+    {
+        if (distance > maxPlayerDistance)
+        {
+            maxPlayerDistance = distance;
+        }
     }
 }

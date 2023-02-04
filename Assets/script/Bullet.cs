@@ -9,14 +9,14 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.Find("GameManger").GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        float speed = 0.1f;
+        float speed = 0.3f;
         float distanceCount = 0f;
 
         //^‰º‚É”ò‚Ô‹““®
