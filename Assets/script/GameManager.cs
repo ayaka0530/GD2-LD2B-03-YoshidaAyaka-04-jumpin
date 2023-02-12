@@ -86,6 +86,10 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Result");
     }
+    public void NextScene(string nextScene)
+    {
+        SceneManager.LoadScene(nextScene);
+    }
     public float TeachEnemyScore()
     {
         return scoreCount;

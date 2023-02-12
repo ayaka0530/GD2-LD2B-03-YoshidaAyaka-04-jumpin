@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
     public AudioSource jumpAudio;   //音楽を再生するコンポーネント
     public GameObject[] heartArray = new GameObject[3]; //ハートの表示
     public GameObject[] bulletArray = new GameObject[3]; //弾の表示
+    public GameObject bombParticle;
     [SerializeField] GameObject dustCloud;//着地エフェクト
     public GameManager gameManager;
     public Rigidbody2D rb;
@@ -18,7 +20,7 @@ public class Player : MonoBehaviour
 
     private float speed = 0.05f;
     private int jumpCount = 0;
-    private float jumpForce = 10f;
+    private float jumpForce = 12f;
     private int playerHp = 3;
     private float invincibleTime = 0f;
     private bool isInvincible = false;//trueの時に無敵時間になる
@@ -200,9 +202,16 @@ Vector2 position = transform.position;
         if (other.gameObject.tag == "Floor")
         {
             //床に降りたらjumpCountを0に
-            jumpCount = 0;
+            //jumpCount = 0;
             //床にプレイヤーがあたったらエフェクトを出す
             Instantiate(dustCloud, transform.position, dustCloud.transform.rotation);
+            /*GameObject[] enemyObjects =
+              GameObject.FindGameObjectsWithTag("Enemy");
+            for (int i = 0; i < enemyObjects.Length; i++)
+            {
+                Destroy(enemyObjects[i]);
+            }
+            Instantiate(bombParticle, transform.position, bombParticle.transform.rotation);*/
         }
 
         if (other.gameObject.tag == "Enemy")

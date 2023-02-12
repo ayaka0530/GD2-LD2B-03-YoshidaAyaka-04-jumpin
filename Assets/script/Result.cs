@@ -32,10 +32,11 @@ public class Result : MonoBehaviour
 
         distance = gameManager.TeachDistance();
         //distanceScoreText.text = "" + distance;
+        distance = distance * 100;
         distanceScoreText.text = string.Format("{0:f0}", distance);//è¨êîì_ÇÃêßå¿
 
 
-        score = enemyScore * distance;
+        score = enemyScore + distance;
         scoreText.text = string.Format("{0:f0}", score);//è¨êîì_ÇÃêßå¿
     }
 
